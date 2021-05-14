@@ -1,7 +1,8 @@
+require('dotenv/config');
 const mongoose = require('mongoose')
 
 mongoose.connect(
-  'mongodb+srv://omni:omni@apartamentos.fignu.mongodb.net/CDA?retryWrites=true&w=majority', 
+  process.env.URL_API, 
   { 
     useNewUrlParser: true,
     useUnifiedTopology: true,
