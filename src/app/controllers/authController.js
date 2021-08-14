@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const router = express.Router()
 const hashJWT = process.env.hashJWT
-const tokenLife = process.env.tokenLifes
+const tokenLife = process.env.tokenLife
 
 function gerarToken(params = {}) {
   return jwt.sign(params, hashJWT, {
@@ -36,11 +36,13 @@ router.post('/authenticate', async (req, res) => {
   const { userName, password } = req.body
   const user = await User.findOne({ userName }).select('+password')
   if (!user) {
-    return res.status(400).send({ error: 'Usuário não encontrado' })
+    res.statusMessage = 'Usuário não encontrado'
+    return res.status(400).end()
   }
 
   if (!await bcrypt.compare(password, user.password)) {
-    return res.status(400).send({ error: 'Senha incorreta' })
+    res.statusMessage = 'Senha incorreta'
+    return res.status(400).end()
   }
 
   user.password = undefined
